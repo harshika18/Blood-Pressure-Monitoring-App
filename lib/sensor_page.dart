@@ -1,9 +1,12 @@
 import 'dart:async';
 import 'dart:convert' show utf8;
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:oscilloscope/oscilloscope.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:flutter/foundation.dart';
 
 class SensorPage extends StatefulWidget {
   const SensorPage({Key key, this.device}) : super(key: key);
@@ -27,7 +30,21 @@ class _SensorPageState extends State<SensorPage> {
     isReady = false;
     connectToDevice();
   }
+  Future<String> get _localPath async {
+    final directory = await getApplicationDocumentsDirectory();
 
+    return directory.path;
+  }
+  Future<File> get _localFile async {
+    final path = await _localPath;
+    return File('$path/data.txt');
+  }
+  Future<File> writeCounter(String data) async {
+    final file = await _localFile;
+
+    // Write the file
+    return file.writeAsString('$data');
+  }
   connectToDevice() async {
     if (widget.device == null) {
       _Pop();
@@ -157,6 +174,7 @@ class _SensorPageState extends State<SensorPage> {
                         if (snapshot.connectionState ==
                             ConnectionState.active) {
                           var currentValue = _dataParser(snapshot.data);
+                          writeCounter(currentValue);
                           var bothvalues = currentValue.split(' ');
                           tracePPG.add(double.tryParse(bothvalues[0]) ?? 0);
                           traceECG.add(double.tryParse(bothvalues[1]) ?? 0);
