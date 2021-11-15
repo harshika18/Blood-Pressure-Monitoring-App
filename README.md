@@ -1,4 +1,4 @@
-# flutter_app_esp32_dust_sensor
+# Blood Pressure Monitoring App
 
 A new Flutter application.
 
@@ -15,3 +15,5 @@ For help getting started with Flutter, view our
 [online documentation](https://flutter.dev/docs), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 # BTP-1
+
+A mobile application using Flutter which can collect ECG and PPG data from the sensor via bluetooth to calculate the BP and graphically present it on the screen.
